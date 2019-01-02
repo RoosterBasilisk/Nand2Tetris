@@ -1,0 +1,63 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+
+/**
+ * 8-way demultiplexor:
+ * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
+ *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+
+ Mux(a, b, sel[0]) = w1 = {a, b, 0, 0, 0, 0, 0, 0}
+ Mux(c, d, sel[0]) = w2 = {0, 0, c, d, 0, 0, 0, 0}
+ Mux(e, f, sel[0]) = w3 = {0, 0, 0, 0, e, f, 0, 0}
+ Mux(g, h, sel[0]) = w4 = {0, 0, 0, 0, 0, 0, g, h}
+
+ Mux(w1, w2, sel[1]) = w5 = {a, b, c, d, 0, 0, 0, 0}
+ Mux(w3, w4, sel[1]) = w6 = {0, 0, 0, 0, e, f, g, h}
+
+ Mux(w5, w6, sel[2]) = in
+
+ Dmux(in, sel[2], w5, w6)
+ w5 = {a, b, c, d, 0, 0, 0, 0}
+ w6 = {0, 0, 0, 0, e, f, g, h}
+
+ Dmux(w6, sel[1], w3, w4)
+ w3 = {0, 0, 0, 0, e, f, 0, 0}
+ w4 = {0, 0, 0, 0, 0, 0, g, h}
+
+ Dmux(w5, sel[1], w1, w2)
+ w2 = {0, 0, c, d, 0, 0, 0, 0}
+ w1 = {a, b, 0, 0, 0, 0, 0, 0}
+
+ Dmux(w4, sel[0], g, h)
+ h = {0, 0, 0, 0, 0, 0, 0, h}
+ g = {0, 0, 0, 0, 0, 0, g, 0}
+ Dmux(w3, sel[0], e, f)
+ f = {0, 0, 0, 0, 0, f, 0, 0}
+ g = {0, 0, 0, 0, e, 0, 0, 0}
+ Dmux(w2, sel[0], c, d)
+ d = {0, 0, 0, d, 0, 0, 0, 0}
+ c = {0, 0, c, 0, 0, 0, 0, 0}
+ Dmux(w1, sel[0], a, b)
+ b = {0, b, 0, 0, 0, 0, 0, 0}
+ a = {a, 0, 0, 0, 0, 0, 0, 0}
+ */
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    // Put your code here:
+    Dmux(in, sel=sel[2], w5, w6);
+    Dmux(w6, sel=sel[1], w3, w4);
+    Dmux(w5, sel=sel[1], w1, w2);
+    Dmux(w4, sel=sel[0], g, h);
+    Dmux(w3, sel=sel[0], e, f);
+    Dmux(w2, sel=sel[0], c, d);
+    Dmux(w1, sel=sel[0], a, b);
+
+}
